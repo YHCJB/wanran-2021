@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>wans发货</title>
+
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        #tabul li {
+            margin-left: 100px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:visited {
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ba2636;
+            text-decoration: underline;
+        }
+
+        a:active {
+            color: #ba2636;
+        }
+
+        table.hovertable {
+             font-family: verdana, arial, sans-serif;
+             font-size: 11px;
+             color: #333333;
+             border-width: 1px;
+             border-color: #999999;
+             border-collapse: collapse;
+        }
+
+        table.hovertable th {
+             background-color: #c3dde0;
+             border-width: 1px;
+             padding: 8px;
+             border-style: solid;
+             border-color: #a9c6c9;
+        }
+
+        table.hovertable tr {
+             background-color: #d4e3e5;
+        }
+
+        table.hovertable td {
+             border-width: 1px;
+             padding: 8px;
+             border-style: solid;
+             border-color: #a9c6c9;
+        }
+
+    </style>
+</head>
+
+<body>
+<!--头部---->
+<div style="width: 1600px;height: 80px;background-color: #f0f0f4;margin: 0 auto;display: flex;justify-content: center;align-items: center;
+         font-size: 35px;color: #4b5cc4">
+    wans优选商城--发货后台
+</div>
+
+<!--订单显示区---->
+<div style="width: 1600px;height: 50px;background-color: #f0f0f4;margin: 0 auto;background-color: black;display: flex;justify-content: flex-start;
+         align-items: center;box-sizing: border-box;color: #fff;font-size: 20px">
+<ul class="nav" id="tabul">
+    <li><a href="#a" tt="A.html" data-toggle="tab">快递发货</a></li>
+    <li><a href="#b" tt="B.html" data-toggle="tab">所有订单</a></li>
+    <li><a href="#c" tt="C.html" data-toggle="tab">处理售后</a></li>
+</ul>
+</div>
+
+<div id="myTabContent" class="tab-content" style="width: 1600px;height: 500px;background-color: #f0f0f4;margin: 0 auto;">
+    <!--快递发货---->
+    <div class="tab-pane active" id="a">
+        <div style="background-color: #f0f0f4">
+            {% for data in filterdata reversed %}
+                <div style="height: 1px;width: 100%;background-color: #ff461f"></div>
+            <div style="font-size: 18px;box-sizing: border-box;padding: 10px;">
+                <div style="display: flex;justify-content: space-between">
+                    <span>订单id:{{ data.id }}</span>
+                    <span>订单编号:{{ data.dindanbianhao }}</span>
+                    <span>订单时间:{{ data.add_time }}</span>
+                    <span>支付状态:{{ data.payzt }}</span>
+                </div>
+                <div style="margin-top: 10px;display: flex;">
+                    <div>
+                        <img src={{ data.product.cover_img }} alt="" style="width: 200px;height: 200px;">
+                    </div>
+                    <div style="height: 1px;width: 30px;"></div>
+                    <div style="display: flex;flex-direction: column;">
+                         <span style="color: red;font-weight: bolder">商品名称:{{ data.product.name }}</span>
+                        <span>商品id:{{ data.product.id }}</span>
+                        <span>购买数量:{{ data.count }}件</span>
+                        <span>订单留言:{{ data.wxusertext }}</span>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;display: flex;flex-direction: column;">
+                    <span>地址id:{{ data.address.id }}</span>
+                    <span>收货人:{{ data.address.aname }}</span>
+                    <span>收货电话:{{ data.address.aphone }}</span>
+                     <span>收货地址:{{ data.address.city }}-{{ data.address.aaddress }}</span>
+                </div>
+                <div style="position: relative;left: 880px; width: 300px;height: 0px;background-color: #9ed048;top:-280px;">
+                    <!-----发货区------>
+                    <form style="" action="{% url 'wxfahuo' %}" method="post">
+                        <div style="width: 500px;height: 200px;border: 1px solid #000;box-sizing: border-box;padding: 15px 0 15px 15px">
+                        <div>
+                            <span>快递公司:</span>
+                            <input type="text"  id="mycomcom" name="mycomcom" placeholder="请填写快递公司" autofocus required
+                       style="display:inline;width:300px;height: 35px;"autocomplete="off" />
+                        </div>
+                        <div style="margin-top: 25px;">
+                            <span>快递单号:</span>
+                            <input type="text"  id="mynumnum" name="mynumnum" placeholder="请填写快递单号" autofocus required
+                       style="display:inline;width:300px;height: 35px;"autocomplete="off" />
+                        </div>
+                            <button style="margin-top: 25px" class="btn-danger btn-sm">发货</button>
+                        </div>
+                        <input type="hidden" name="dindanid" value={{ data.id }}>
+                     </form>
+                </div>
+            </div>
+            {% endfor %}
+            <!-----放个占位,让底部有空位------>
+                <div style="height: 200px;width: 100%;background-color: #f0f0f4"></div>
+            <!----------->
+            </div>
+    </div>
+    <!--所有订单---->
+    <div class="tab-pane" id="b">所有订单</div>
+    <!--处理售后---->
+    <div class="tab-pane" id="c">处理售后</div>
+
+</div>
+
+<!--订单显示区---->
+<script>
+    /*选择性加载页面，初始加载页面A*/
+ $(function() {
+        $(".nav li").click(function () {
+            var _a = $(this).find("a");
+            if($(_a.attr("href")).html()==""){   //判断页面是否已加载
+                $(_a.attr("href")).addClass("active").siblings().removeClass("active");
+            //tab页点击事件对应的页面元素置为"active"样式，其他兄弟页面移除"active"样式
+                $(_a.attr("href")).load(_a.attr("tt"));
+            //加载样式为"active"的页面
+            }
+        });
+        $(".nav.nav-tabs li").get(0).click();    //默认选择加载第一个页面A
+ });
+</script>
+</body>
+</html>
